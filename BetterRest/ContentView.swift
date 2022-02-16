@@ -8,7 +8,7 @@ import CoreML
 import SwiftUI
 
 struct ContentView: View {
-    @State private var wakeUp = Date.now
+    @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 1
     
@@ -16,44 +16,65 @@ struct ContentView: View {
     @State private var alertMessage = ""
     @State private var showingAlert = false
     
+    static var defaultWakeTime: Date {
+        var components = DateComponents()
+        components.hour = 7
+        components.minute = 0
+        return Calendar.current.date(from: components) ?? Date.now
+    }
+    
     var body: some View {
         
         NavigationView {
-            Form {
-                VStack {
-                    Text("When do you want to wake up?")
-                        .font(.headline)
-                    
-                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
-                        .labelsHidden()
-                    
-                    Divider()
-                    
-                    Text("Desired amount of sleep")
-                        .font(.headline)
-                    
-                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
-                    
-                    Divider()
+            VStack {
+                Form {
+                        VStack (alignment: .leading, spacing: 0) {
+                            Text("When would you like to wake up?")
+                                .font(.title3)
+                                .bold()
+                            
+                            Spacer()
+                            
+                            DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
+                                .datePickerStyle(.automatic)
+                                .labelsHidden()
+                        }
 
-                    
-                    Text("Daily Coffee Intake")
-                        .font(.headline)
-                    
-                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
-                    
-                }
-                .navigationTitle("BetterRest")
-                .padding()
-                .toolbar {
-                    Button("Calculate", action: calculateBedtime)
-                }
-                .alert(alertTitle, isPresented: $showingAlert) {
-                    Button("OK") { }
-            } message: {
-                Text(alertMessage)
+                        VStack (alignment: .leading, spacing: 0) {
+                            Text("Desired amount of sleep?")
+                                .font(.title3)
+                                .bold()
+                            
+                            Spacer(minLength: 12.5)
+                            
+                            Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                                .font(.title3)
+                        }
+
+                        VStack (alignment: .leading, spacing: 0) {
+                            Text("Daily Coffee Intake?")
+                                .font(.title3)
+                                .bold()
+                            
+                            Spacer(minLength: 12.5)
+                            
+                            Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+                                .font(.title3)
+                        }
+                    }
+                    .navigationTitle("BetterRest")
+                    .alert(alertTitle, isPresented: $showingAlert) {
+                        Button("OK") { }
+                } message: {
+                    Text(alertMessage)
             }
-        }
+                Button(action: calculateBedtime) {
+                    Label("Calculate", systemImage: "timelapse")
+                        .foregroundColor(.mint)
+                }
+                .font(.title)
+                
+            }
     }
 }
         
