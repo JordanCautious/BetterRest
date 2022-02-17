@@ -61,19 +61,27 @@ struct ContentView: View {
                             Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
                                 .font(.title3)
                         }
+                    
+                    if coffeeAmount < 8  {
+                        Text("Make sure to drink plenty of water!")
+                    } else if coffeeAmount >= 15 {
+                            Text("That's definitely a bit much...")
+                    } else {
+                        Text("Don't you think that's too much Coffee?")
                     }
-                    .navigationTitle("BetterRest")
-                    .alert(alertTitle, isPresented: $showingAlert) {
-                        Button("OK") { }
+                    
+                }
+                .navigationTitle("BetterRest")
+                .alert(alertTitle, isPresented: $showingAlert) {
+                    Button("OK") { }
                 } message: {
                     Text(alertMessage)
-            }
+                }
                 Button(action: calculateBedtime) {
-                    Label("Calculate", systemImage: "timelapse")
-                        .foregroundColor(.mint)
+                    Label("Calculate", systemImage: "brain.head.profile")
+                        .foregroundColor(.teal)
                 }
                 .font(.title)
-                
             }
     }
 }
