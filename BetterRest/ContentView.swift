@@ -29,44 +29,44 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 Form {
-                        VStack (alignment: .leading, spacing: 0) {
-                            Text("When would you like to wake up?")
-                                .font(.title3)
-                                .bold()
-                            
-                            Spacer()
-                            
-                            DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
-                                .datePickerStyle(.automatic)
-                                .labelsHidden()
-                        }
-
-                        VStack (alignment: .leading, spacing: 0) {
-                            Text("Desired amount of sleep?")
-                                .font(.title3)
-                                .bold()
-                            
-                            Spacer(minLength: 12.5)
-                            
-                            Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
-                                .font(.title3)
-                        }
-
-                        VStack (alignment: .leading, spacing: 0) {
-                            Text("Daily Coffee Intake?")
-                                .font(.title3)
-                                .bold()
-                            
-                            Spacer(minLength: 12.5)
-                            
-                            Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
-                                .font(.title3)
-                        }
+                    VStack (alignment: .leading, spacing: 0) {
+                        Text("When would you like to wake up?")
+                            .font(.title3)
+                            .bold()
+                        
+                        Spacer()
+                        
+                        DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
+                            .datePickerStyle(.automatic)
+                            .labelsHidden()
+                    }
+                    
+                    VStack (alignment: .leading, spacing: 0) {
+                        Text("Desired amount of sleep?")
+                            .font(.title3)
+                            .bold()
+                        
+                        Spacer(minLength: 12.5)
+                        
+                        Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                            .font(.title3)
+                    }
+                    
+                    VStack (alignment: .leading, spacing: 0) {
+                        Text("Daily Coffee Intake?")
+                            .font(.title3)
+                            .bold()
+                        
+                        Spacer(minLength: 12.5)
+                        
+                        Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+                            .font(.title3)
+                    }
                     
                     if coffeeAmount < 8  {
                         Text("Make sure to drink plenty of water!")
                     } else if coffeeAmount >= 15 {
-                            Text("That's definitely a bit much...")
+                        Text("That's definitely a bit much...")
                     } else {
                         Text("Don't you think that's too much Coffee?")
                     }
@@ -95,9 +95,9 @@ struct ContentView: View {
                 }
                 .font(.title)
             }
+        }
     }
-}
-        
+    
     func calculateBedtime() {
         do {
             let config = MLModelConfiguration()
@@ -108,7 +108,7 @@ struct ContentView: View {
             let minute = (components.minute ?? 0) * 60
             
             let prediction = try model.prediction(wake: Double(hour + minute), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
-                                 
+            
             let sleepTime = wakeUp - prediction.actualSleep
             alertTitle = "Your ideal bedtime is..."
             alertMessage = sleepTime.formatted(date: .omitted, time: .shortened)
