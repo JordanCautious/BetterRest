@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 1
+    @State private var selectionA = 3
     
     @State private var alertTitle = ""
     @State private var alertMessage = ""
@@ -70,6 +71,17 @@ struct ContentView: View {
                         Text("Don't you think that's too much Coffee?")
                     }
                     
+                    VStack {
+                        Text("Please choose one:")
+                            .font(.title3)
+                        
+                        Picker(selection: $selectionA, label: Text("Pick one:")) {
+                            Image(systemName: "tortoise.fill").tag(1)
+                            Image(systemName: "hare.fill").tag(2)
+                            Image(systemName: "bolt.fill").tag(3)
+                        }
+                        .pickerStyle(.segmented)
+                    }
                 }
                 .navigationTitle("BetterRest")
                 .alert(alertTitle, isPresented: $showingAlert) {
