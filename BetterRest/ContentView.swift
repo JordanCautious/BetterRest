@@ -25,75 +25,79 @@ struct ContentView: View {
     }
     
     var body: some View {
-        
         NavigationView {
-            VStack {
-                Form {
-                    VStack (alignment: .leading, spacing: 0) {
-                        Text("When would you like to wake up?")
-                            .font(.title3)
-                            .bold()
-                        
+            List {
+                VStack (alignment: .leading, spacing: 0) {
+                    Text("When would you like to wake up?")
+                        .font(.title3)
+                        .bold()
+                    
+                    Spacer()
+                    
+                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
+                        .datePickerStyle(.automatic)
+                        .labelsHidden()
+                }
+                
+                VStack (alignment: .leading, spacing: 0) {
+                    Text("Desired amount of sleep?")
+                        .font(.title3)
+                        .bold()
+                    
+                    Spacer(minLength: 12.5)
+                    
+                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                        .font(.title3)
+                }
+                
+                VStack (alignment: .leading, spacing: 0) {
+                    Text("Daily Coffee Intake?")
+                        .font(.title3)
+                        .bold()
+                    
+                    Spacer(minLength: 12.5)
+                    
+                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+                        .font(.title3)
+                }
+                
+                if coffeeAmount < 8  {
+                    Text("Make sure to drink plenty of water!")
+                } else if coffeeAmount >= 15 {
+                    Text("That's definitely a bit much...")
+                } else {
+                    Text("Don't you think that's too much Coffee?")
+                }
+                
+                VStack {
+                    Text("Please choose one:")
+                        .font(.title3)
+                    
+                    Picker(selection: $selectionA, label: Text("Pick one:")) {
+                        Image(systemName: "tortoise.fill").tag(1)
+                        Image(systemName: "hare.fill").tag(2)
+                        Image(systemName: "bolt.fill").tag(3)
+                    }
+                    .pickerStyle(.segmented)
+                }
+                
+                Section ("Compute the time?") {
+                    HStack {
                         Spacer()
-                        
-                        DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
-                            .datePickerStyle(.automatic)
-                            .labelsHidden()
-                    }
-                    
-                    VStack (alignment: .leading, spacing: 0) {
-                        Text("Desired amount of sleep?")
-                            .font(.title3)
-                            .bold()
-                        
-                        Spacer(minLength: 12.5)
-                        
-                        Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
-                            .font(.title3)
-                    }
-                    
-                    VStack (alignment: .leading, spacing: 0) {
-                        Text("Daily Coffee Intake?")
-                            .font(.title3)
-                            .bold()
-                        
-                        Spacer(minLength: 12.5)
-                        
-                        Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
-                            .font(.title3)
-                    }
-                    
-                    if coffeeAmount < 8  {
-                        Text("Make sure to drink plenty of water!")
-                    } else if coffeeAmount >= 15 {
-                        Text("That's definitely a bit much...")
-                    } else {
-                        Text("Don't you think that's too much Coffee?")
-                    }
-                    
-                    VStack {
-                        Text("Please choose one:")
-                            .font(.title3)
-                        
-                        Picker(selection: $selectionA, label: Text("Pick one:")) {
-                            Image(systemName: "tortoise.fill").tag(1)
-                            Image(systemName: "hare.fill").tag(2)
-                            Image(systemName: "bolt.fill").tag(3)
+                        Button(action: calculateBedtime) {
+                            Label("Calculate", systemImage: "brain.head.profile")
+                                .foregroundColor(.blue)
                         }
-                        .pickerStyle(.segmented)
+                        .font(.title)
+                        Spacer()
                     }
                 }
-                .navigationTitle("BetterRest")
-                .alert(alertTitle, isPresented: $showingAlert) {
-                    Button("OK") { }
-                } message: {
-                    Text(alertMessage)
-                }
-                Button(action: calculateBedtime) {
-                    Label("Calculate", systemImage: "brain.head.profile")
-                        .foregroundColor(.teal)
-                }
-                .font(.title)
+            }
+            .navigationTitle("BetterRest")
+            .alert(alertTitle, isPresented: $showingAlert) {
+                Button("OK") { }
+            } message: {
+                Text(alertMessage)
             }
         }
     }
