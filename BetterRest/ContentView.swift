@@ -81,16 +81,22 @@ struct ContentView: View {
                     .pickerStyle(.segmented)
                 }
                 
-                Section ("Compute the time?") {
+                Section {
                     HStack {
                         Spacer()
                         Button(action: calculateBedtime) {
                             Label("Calculate", systemImage: "brain.head.profile")
-                                .foregroundColor(.blue)
+                                .foregroundColor(.white)
                         }
                         .font(.title)
+                        .padding(12)
+                        .foregroundColor(.white)
+                        
                         Spacer()
                     }
+                    .background(.teal)
+                    .clipShape(Capsule())
+                    .padding(5)
                 }
             }
             .navigationTitle("BetterRest")
