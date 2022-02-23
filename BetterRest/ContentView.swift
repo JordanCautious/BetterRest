@@ -8,6 +8,7 @@ import CoreML
 import SwiftUI
 
 struct ContentView: View {
+    // All Private varibles needed for the app
     @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 1
@@ -17,20 +18,22 @@ struct ContentView: View {
     @State private var alertMessage = ""
     @State private var showingAlert = false
     
+    // Time Components
     static var defaultWakeTime: Date {
         var components = DateComponents()
         components.hour = 7
         components.minute = 0
         return Calendar.current.date(from: components) ?? Date.now
     }
-    
     var body: some View {
         NavigationView {
             List {
+                // Wake up time
                 VStack (alignment: .leading, spacing: 0) {
                     Text("When would you like to wake up?")
                         .font(.title3)
                         .bold()
+                        .foregroundColor(.teal)
                     
                     Spacer()
                     
@@ -39,10 +42,12 @@ struct ContentView: View {
                         .labelsHidden()
                 }
                 
+                // Desired Amount of Sleep
                 VStack (alignment: .leading, spacing: 0) {
                     Text("Desired amount of sleep?")
                         .font(.title3)
-                        .bold()
+                    //.bold()
+                        .foregroundColor(.teal)
                     
                     Spacer(minLength: 12.5)
                     
@@ -50,10 +55,12 @@ struct ContentView: View {
                         .font(.title3)
                 }
                 
+                // Daily Coffee Intake
                 VStack (alignment: .leading, spacing: 0) {
                     Text("Daily Coffee Intake?")
                         .font(.title3)
-                        .bold()
+                    //.bold()
+                        .foregroundColor(.teal)
                     
                     Spacer(minLength: 12.5)
                     
@@ -61,17 +68,30 @@ struct ContentView: View {
                         .font(.title3)
                 }
                 
-                if coffeeAmount < 8  {
-                    Text("Make sure to drink plenty of water!")
-                } else if coffeeAmount >= 15 {
-                    Text("That's definitely a bit much...")
-                } else {
-                    Text("Don't you think that's too much Coffee?")
+                // Coffee Consumption Warning
+                HStack {
+                    Spacer()
+                    if coffeeAmount < 8  {
+                        Text("Make sure to drink plenty of water!")
+                            .foregroundColor(.green)
+
+                    } else if coffeeAmount >= 15 {
+                        Text("That's definitely a bit much...")
+                            .foregroundColor(.red)
+                    } else {
+                        Text("That might be too much Coffee...")
+                            .foregroundColor(.orange)
+                    }
+                    Spacer()
                 }
+                .padding(10)
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
                 
+                // Segemented Picker
                 VStack {
-                    Text("Please choose one:")
-                        .font(.title3)
+                    Text("Energy Level?")
+                        .font(.title2)
                     
                     Picker(selection: $selectionA, label: Text("Pick one:")) {
                         Image(systemName: "tortoise.fill").tag(1)
@@ -81,6 +101,7 @@ struct ContentView: View {
                     .pickerStyle(.segmented)
                 }
                 
+                // Calculate Button
                 Section {
                     HStack {
                         Spacer()
@@ -94,7 +115,7 @@ struct ContentView: View {
                         
                         Spacer()
                     }
-                    .background(.teal)
+                    .background(.blue)
                     .clipShape(Capsule())
                     .padding(5)
                 }
@@ -108,6 +129,7 @@ struct ContentView: View {
         }
     }
     
+    // Machine Learning Stuff
     func calculateBedtime() {
         do {
             let config = MLModelConfiguration()
@@ -134,5 +156,8 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .preferredColorScheme(.dark)
+        ContentView()
+            .preferredColorScheme(.light)
     }
 }
