@@ -33,7 +33,6 @@ struct ContentView: View {
                     Text("When would you like to wake up?")
                         .font(.title3)
                         .bold()
-                        .foregroundColor(.teal)
                     
                     Spacer()
                     
@@ -46,8 +45,6 @@ struct ContentView: View {
                 VStack (alignment: .leading, spacing: 0) {
                     Text("Desired amount of sleep?")
                         .font(.title3)
-                    //.bold()
-                        .foregroundColor(.teal)
                     
                     Spacer(minLength: 12.5)
                     
@@ -59,8 +56,6 @@ struct ContentView: View {
                 VStack (alignment: .leading, spacing: 0) {
                     Text("Daily Coffee Intake?")
                         .font(.title3)
-                    //.bold()
-                        .foregroundColor(.teal)
                     
                     Spacer(minLength: 12.5)
                     
@@ -115,7 +110,7 @@ struct ContentView: View {
                         
                         Spacer()
                     }
-                    .background(.blue)
+                    .background(.black)
                     .clipShape(Capsule())
                     .padding(5)
                 }
