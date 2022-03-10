@@ -18,102 +18,108 @@ struct ContentView: View {
     @State private var alertMessage = ""
     @State private var showingAlert = false
     
-    // Time Components
+    var wakeUpTime: some View {
+        VStack (alignment: .leading, spacing: 0) {
+            Text("When would you like to wake up?")
+                .font(.title3)
+                .bold()
+            
+            Spacer()
+            
+            DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
+                .datePickerStyle(.automatic)
+                .labelsHidden()
+        }
+    }
+    var desiredAmountOfSleep: some View {
+        VStack (alignment: .leading, spacing: 0) {
+            Text("Desired amount of sleep?")
+                .font(.title3)
+            
+            Spacer(minLength: 12.5)
+            
+            Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                .font(.title3)
+        }
+    }
+    var dailyCoffeeIntake: some View {
+        VStack (alignment: .leading, spacing: 0) {
+            Text("Daily Coffee Intake?")
+                .font(.title3)
+            
+            Spacer(minLength: 12.5)
+            
+            Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+                .font(.title3)
+        }
+    }
+    var coffeeWarning: some View {
+        HStack {
+            Spacer()
+            if coffeeAmount < 8  {
+                Text("Make sure to drink plenty of water!")
+                    .foregroundColor(.green)
+
+            } else if coffeeAmount >= 15 {
+                Text("That's definitely a bit much...")
+                    .foregroundColor(.red)
+            } else {
+                Text("That might be too much Coffee...")
+                    .foregroundColor(.orange)
+            }
+            Spacer()
+        }
+        .padding(10)
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+    var energyLevel: some View {
+        VStack {
+            Text("Energy Level?")
+                .font(.title2)
+            
+            Picker(selection: $selectionA, label: Text("Pick one:")) {
+                Image(systemName: "tortoise.fill").tag(1)
+                Image(systemName: "hare.fill").tag(2)
+                Image(systemName: "bolt.fill").tag(3)
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+    var calculateButton: some View {
+        Section {
+            HStack {
+                Spacer()
+                Button(action: calculateBedtime) {
+                    Label("Calculate", systemImage: "brain.head.profile")
+                        .foregroundColor(.white)
+                }
+                .font(.title)
+                .padding(12)
+                .foregroundColor(.white)
+                
+                Spacer()
+            }
+            .background(.black)
+            .clipShape(Capsule())
+            .padding(5)
+        }
+    }
     static var defaultWakeTime: Date {
         var components = DateComponents()
-        components.hour = 7
-        components.minute = 0
+        components.hour = 7; components.minute = 0
         return Calendar.current.date(from: components) ?? Date.now
     }
+    
     var body: some View {
         NavigationView {
             List {
-                // Wake up time
-                VStack (alignment: .leading, spacing: 0) {
-                    Text("When would you like to wake up?")
-                        .font(.title3)
-                        .bold()
-                    
-                    Spacer()
-                    
-                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
-                        .datePickerStyle(.automatic)
-                        .labelsHidden()
-                }
-                
-                // Desired Amount of Sleep
-                VStack (alignment: .leading, spacing: 0) {
-                    Text("Desired amount of sleep?")
-                        .font(.title3)
-                    
-                    Spacer(minLength: 12.5)
-                    
-                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
-                        .font(.title3)
-                }
-                
-                // Daily Coffee Intake
-                VStack (alignment: .leading, spacing: 0) {
-                    Text("Daily Coffee Intake?")
-                        .font(.title3)
-                    
-                    Spacer(minLength: 12.5)
-                    
-                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
-                        .font(.title3)
-                }
-                
-                // Coffee Consumption Warning
-                HStack {
-                    Spacer()
-                    if coffeeAmount < 8  {
-                        Text("Make sure to drink plenty of water!")
-                            .foregroundColor(.green)
-
-                    } else if coffeeAmount >= 15 {
-                        Text("That's definitely a bit much...")
-                            .foregroundColor(.red)
-                    } else {
-                        Text("That might be too much Coffee...")
-                            .foregroundColor(.orange)
-                    }
-                    Spacer()
-                }
-                .padding(10)
-                .background(.regularMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                
-                // Segemented Picker
-                VStack {
-                    Text("Energy Level?")
-                        .font(.title2)
-                    
-                    Picker(selection: $selectionA, label: Text("Pick one:")) {
-                        Image(systemName: "tortoise.fill").tag(1)
-                        Image(systemName: "hare.fill").tag(2)
-                        Image(systemName: "bolt.fill").tag(3)
-                    }
-                    .pickerStyle(.segmented)
-                }
-                
-                // Calculate Button
-                Section {
-                    HStack {
-                        Spacer()
-                        Button(action: calculateBedtime) {
-                            Label("Calculate", systemImage: "brain.head.profile")
-                                .foregroundColor(.white)
-                        }
-                        .font(.title)
-                        .padding(12)
-                        .foregroundColor(.white)
-                        
-                        Spacer()
-                    }
-                    .background(.black)
-                    .clipShape(Capsule())
-                    .padding(5)
-                }
+                wakeUpTime
+                desiredAmountOfSleep
+                dailyCoffeeIntake
+                coffeeWarning
+                energyLevel
+                calculateButton
             }
             .navigationTitle("BetterRest")
             .alert(alertTitle, isPresented: $showingAlert) {
@@ -123,7 +129,6 @@ struct ContentView: View {
             }
         }
     }
-    
     // Machine Learning Stuff
     func calculateBedtime() {
         do {
