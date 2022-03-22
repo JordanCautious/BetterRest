@@ -56,16 +56,16 @@ struct ContentView: View {
     var coffeeWarning: some View {
         HStack {
             Spacer()
-            if coffeeAmount < 8  {
+            switch coffeeAmount {
+            case 1..<8:
                 Text("Make sure to drink plenty of water!")
                     .foregroundColor(.green)
-
-            } else if coffeeAmount >= 15 {
-                Text("That's definitely a bit much...")
-                    .foregroundColor(.red)
-            } else {
+            case 8..<15:
                 Text("That might be too much Coffee...")
                     .foregroundColor(.orange)
+            default:
+                Text("That's definitely a bit much...")
+                    .foregroundColor(.red)
             }
             Spacer()
         }
