@@ -18,6 +18,25 @@ struct ContentView: View {
     @State private var alertMessage = ""
     @State private var showingAlert = false
     
+    var body: some View {
+        NavigationView {
+            List {
+                wakeUpTime
+                desiredAmountOfSleep
+                dailyCoffeeIntake
+                coffeeWarning
+                energyLevel
+                calculateButton
+            }
+            .navigationTitle("BetterRest")
+            .alert(alertTitle, isPresented: $showingAlert) {
+                Button("OK") { }
+            } message: {
+                Text(alertMessage)
+            }
+        }
+    }
+    
     var wakeUpTime: some View {
         VStack (alignment: .leading, spacing: 0) {
             Text("When would you like to wake up?")
@@ -111,24 +130,6 @@ struct ContentView: View {
         return Calendar.current.date(from: components) ?? Date.now
     }
     
-    var body: some View {
-        NavigationView {
-            List {
-                wakeUpTime
-                desiredAmountOfSleep
-                dailyCoffeeIntake
-                coffeeWarning
-                energyLevel
-                calculateButton
-            }
-            .navigationTitle("BetterRest")
-            .alert(alertTitle, isPresented: $showingAlert) {
-                Button("OK") { }
-            } message: {
-                Text(alertMessage)
-            }
-        }
-    }
     // Machine Learning Stuff
     func calculateBedtime() {
         do {
