@@ -12,7 +12,7 @@ struct ContentView: View {
     @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 1
-    @State private var selectionA = 3
+    @State private var selectionA = 2
     
     @State private var alertTitle = ""
     @State private var alertMessage = ""
@@ -103,6 +103,18 @@ struct ContentView: View {
                 Image(systemName: "bolt.fill").tag(3)
             }
             .pickerStyle(.segmented)
+            
+            switch selectionA {
+            case 1:
+                Text("Low energy")
+            case 2:
+                Text("High energy")
+            case 3:
+                Text("Extreme energy")
+            default:
+                Text("Nothing else should be possible")
+                    .foregroundColor(.red)
+            }
         }
     }
     var calculateButton: some View {
